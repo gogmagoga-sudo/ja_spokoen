@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#8B5A2B">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Ja_Spokoen">
+<meta charset="UTF-8">
+<title>Дыхание и покой — 4-7-8 / 4-4-4 / помощь при панике</title>
+<style>
+  body{font-family:system-ui,sans-serif;margin:0;padding:16px;color:#263238;user-select:none;
+    background:linear-gradient(180deg,#e8f4fd,#f3eef9)}
+  .bgsvg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.5}
+  .wrap{position:relative;z-index:1}
+  .cloud{animation:drift linear infinite}
+  .c1{animation-duration:90s}.c2{animation-duration:120s;animation-delay:-50s}.c3{animation-duration:105s;animation-delay:-80s}
+  @keyframes drift{from{transform:translateX(-420px)}to{transform:translateX(2000px)}}
+  .stream{stroke-dasharray:46 26;animation:flow 7s linear infinite}
+  .s2{animation-duration:9s;animation-delay:-3s}
+  @keyframes flow{to{stroke-dashoffset:-288}}
+  .wave{animation:waveMove ease-in-out infinite}
+  .w1{animation-duration:7s}.w2{animation-duration:9s;animation-delay:-2s}.w3{animation-duration:11s;animation-delay:-4s}
+  @keyframes waveMove{0%,100%{transform:translateX(0) translateY(0)}50%{transform:translateX(-80px) translateY(6px)}}
+  .boatbg{transform-box:fill-box;transform-origin:50% 100%;animation:boatBob 6s ease-in-out infinite}
+  @keyframes boatBob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(10px) rotate(2deg)}}
+  h1{font-size:20px;text-align:center;margin:4px 0 12px;color:#37474f}
+  .app{display:grid;grid-template-columns:280px 1fr 290px;gap:16px;max-width:1240px;margin:auto;align-items:start}
+  .card{background:rgba(255,255,255,.93);border-radius:16px;box-shadow:0 4px 16px rgba(38,50,56,.12);padding:14px}
+  .btn-start{width:140px;height:140px;border-radius:50%;border:none;cursor:pointer;display:block;margin:6px auto;
+    background:radial-gradient(circle at 32% 30%,#fff,#d9f2e3 70%);
+    box-shadow:0 0 0 10px rgba(76,175,80,.18),0 0 30px rgba(76,175,80,.45);font-size:19px;font-weight:800;color:#1b5e20}
+  .btn-start.run{background:radial-gradient(circle at 32% 30%,#fff,#fde3e0 70%);
+    box-shadow:0 0 0 10px rgba(229,57,53,.15),0 0 30px rgba(229,57,53,.4);color:#b71c1c}
+  .switch{position:relative;width:46px;height:24px;flex:none}
+  .switch input{opacity:0;width:0;height:0}
+  .slider{position:absolute;inset:0;background:#90a4ae;border-radius:12px;transition:.3s;cursor:pointer}
+  .slider::before{content:"";position:absolute;width:18px;height:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.3s}
+  .switch input:checked + .slider{background:#4caf50}
+  .switch input:checked + .slider::before{transform:translateX(22px)}
+  .mrow{display:flex;align-items:center;gap:8px;justify-content:center;margin-top:10px;font-size:12px;color:#546e7a}
+  .steps{margin-top:12px}
+  .step{display:flex;align-items:center;gap:10px;margin:9px 0;font-weight:700;color:#90a4ae;font-size:13px;transition:.3s}
+  .step .dot{width:20px;height:12px;border-radius:8px;background:var(--c);opacity:.3;flex:none;transition:.3s}
+  .step.on{color:#263238}
+  .step.on .dot{opacity:1;box-shadow:0 0 12px var(--c);transform:scale(1.25)}
+  .stage{text-align:center}
+  svg.main{max-width:420px;width:100%;display:block;margin:auto}
+  .phlabel{font-size:32px;font-weight:800;letter-spacing:4px;margin-top:4px;min-height:40px;transition:color .3s}
+  .cbar{position:relative;height:16px;border-radius:8px;overflow:hidden;margin:10px auto 4px;max-width:420px;background:#eceff1;border:1px solid #cfd8dc}
+  .cbar .segm{position:absolute;top:0;bottom:0;opacity:.45}
+  .cbar .tick{position:absolute;top:0;bottom:0;width:1px;background:rgba(38,50,56,.25)}
+  .cbar .cur{position:absolute;top:0;bottom:0;width:3px;background:#1a237e;box-shadow:0 0 6px #1a237e}
+  .cbarlbl{display:flex;justify-content:space-between;max-width:420px;margin:2px auto;font-size:10px;color:#78909c;font-weight:700}
+  .side{display:flex;flex-direction:column;gap:10px}
+  .plate{background:rgba(255,255,255,.95);border-radius:14px;box-shadow:0 6px 18px rgba(38,50,56,.18);padding:14px 16px;
+    border-left:6px solid #7e57c2;font-size:15px;font-weight:700;color:#4a148c;min-height:46px;
+    transform:translateX(50px);opacity:0;transition:.5s ease}
+  .plate.show{transform:none;opacity:1}
+  .pcount{font-size:12px;color:#78909c;text-align:center;font-weight:700}
+  .hint{font-size:11px;color:#90a4ae;text-align:center}
+  .linkbtn{background:none;border:none;color:#78909c;text-decoration:underline;cursor:pointer;font-size:12px;margin-top:8px}
+  /* паника */
+  .stepcard{border:2px solid #cfd8dc;border-radius:14px;padding:10px;margin:8px 0;transition:.3s}
+  .stepcard.done{border-color:#4caf50;background:#eef8ef}
+  .stepcard h3{margin:0 0 6px;font-size:14px;color:#37474f}
+  .bigbtn{width:100%;border:none;border-radius:12px;padding:10px;font-size:13px;font-weight:800;cursor:pointer;
+    background:linear-gradient(180deg,#e3f2fd,#bbdefb);color:#0d47a1}
+  .bigbtn:disabled{opacity:.45;cursor:not-allowed}
+  .tense{background:linear-gradient(180deg,#fde7ef,#f8bbd0);color:#880e4f}
+  .grow{display:flex;align-items:center;gap:7px;margin:6px 0;font-size:12px;font-weight:700;color:#546e7a}
+  .grow b{color:#0d47a1;min-width:32px;text-align:center}
+  .plus{width:32px;height:32px;border-radius:50%;border:none;background:#64b5f6;color:#fff;font-size:17px;font-weight:800;cursor:pointer}
+  .plus:disabled{opacity:.35}
+  .grow.done{color:#2e7d32}.grow.done .plus{background:#4caf50}
+  svg.sea{width:100%;max-width:640px;display:block;margin:auto;border-radius:16px;box-shadow:0 6px 18px rgba(38,50,56,.15)}
+  .fistsvg{width:120px;display:block;margin:2px auto}
+  .biglabel{font-size:17px;font-weight:800;text-align:center;min-height:24px;margin-top:2px}
+  .ameter-wrap{text-align:center}
+  .ameter{position:relative;width:26px;height:190px;background:#eceff1;border-radius:13px;margin:6px auto;overflow:hidden;border:1px solid #cfd8dc}
+  .ameter i{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(180deg,#ef5350,#ff8a65);transition:height .8s ease}
+  .anum{font-size:28px;font-weight:800}
+  .albl{font-size:10px;color:#90a4ae;font-weight:700}
+  /* оверлеи */
+  .ov{position:fixed;inset:0;background:rgba(238,241,246,.82);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:50}
+  .modal{background:#fff;border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.27);padding:24px 32px;max-width:560px;text-align:center}
+  .modal h2{margin:0 0 6px;font-size:25px;color:#37474f}
+  .modal .sub{color:#78909c;font-size:13px;margin-bottom:12px}
+  .modal p{font-size:13.5px;line-height:1.5;color:#546e7a;text-align:left;margin:7px 0}
+  .modal p b{color:#0d47a1}
+  .modebtns{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+  .modebtn{border:3px solid #90a4ae;border-radius:14px;background:#fff;padding:12px 16px;cursor:pointer;text-align:left;transition:.2s}
+  .modebtn:hover{border-color:#4caf50;background:#e8f5e9}
+  .modebtn b{font-size:15px;color:#37474f;display:block}
+  .modebtn span{font-size:11.5px;color:#78909c}
+  .gobtn{border:none;border-radius:14px;padding:13px 28px;font-size:15px;font-weight:800;cursor:pointer;background:#4caf50;color:#fff;margin-top:8px}
+  .musrow{display:flex;align-items:center;gap:10px;justify-content:center;margin:10px 0 2px;font-size:13px;color:#546e7a;font-weight:700}
+</style>
+</head>
+<body>
+
+<!-- ФОН ДЕРЕВНЯ -->
+<svg id="bgVillage" class="bgsvg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" style="display:none">
+  <circle cx="1280" cy="150" r="100" fill="#fff6d8" opacity=".35"/><circle cx="1280" cy="150" r="64" fill="#fff3c4" opacity=".8"/>
+  <g class="cloud c1" fill="#fff" opacity=".75"><ellipse cx="200" cy="140" rx="95" ry="26"/><ellipse cx="265" cy="118" rx="60" ry="20"/><ellipse cx="145" cy="120" rx="52" ry="18"/></g>
+  <g class="cloud c2" fill="#fff" opacity=".6"><ellipse cx="700" cy="90" rx="80" ry="22"/><ellipse cx="755" cy="72" rx="50" ry="16"/><ellipse cx="650" cy="74" rx="44" ry="15"/></g>
+  <g class="cloud c3" fill="#fff" opacity=".7"><ellipse cx="1100" cy="220" rx="88" ry="24"/><ellipse cx="1160" cy="200" rx="55" ry="18"/><ellipse cx="1045" cy="202" rx="48" ry="16"/></g>
+  <path d="M0,560 Q300,470 620,560 T1600,540 L1600,900 L0,900 Z" fill="#d4ead0"/>
+  <path d="M0,650 Q400,565 800,655 T1600,645 L1600,900 L0,900 Z" fill="#c2dfbe"/>
+  <g><rect x="280" y="515" width="76" height="52" rx="4" fill="#f7e6c9" stroke="#c9b18c" stroke-width="2"/><path d="M272,517 L318,483 L364,517 Z" fill="#d9a08c" stroke="#b97f6d" stroke-width="2"/><rect x="308" y="537" width="16" height="30" rx="2" fill="#a5825f"/><rect x="288" y="527" width="12" height="12" fill="#bfe0f2" stroke="#8fb8d0"/><rect x="336" y="527" width="12" height="12" fill="#bfe0f2" stroke="#8fb8d0"/></g>
+  <g><rect x="430" y="545" width="60" height="42" rx="4" fill="#f3e0c0" stroke="#c9b18c" stroke-width="2"/><path d="M424,547 L460,520 L496,547 Z" fill="#c98f7c" stroke="#b97f6d" stroke-width="2"/><rect x="452" y="560" width="13" height="27" rx="2" fill="#a5825f"/></g>
+  <g><rect x="1150" y="525" width="70" height="48" rx="4" fill="#f7e6c9" stroke="#c9b18c" stroke-width="2"/><path d="M1143,527 L1185,496 L1227,527 Z" fill="#d9a08c" stroke="#b97f6d" stroke-width="2"/><rect x="1176" y="545" width="15" height="28" rx="2" fill="#a5825f"/><rect x="1157" y="536" width="11" height="11" fill="#bfe0f2" stroke="#8fb8d0"/></g>
+  <g><rect x="540" y="540" width="8" height="26" fill="#a5825f"/><circle cx="544" cy="527" r="20" fill="#a8cfa4"/></g>
+  <g><rect x="230" y="548" width="7" height="22" fill="#a5825f"/><circle cx="233" cy="537" r="16" fill="#9cc79a"/></g>
+  <g><rect x="1090" y="545" width="8" height="24" fill="#a5825f"/><circle cx="1094" cy="532" r="18" fill="#a8cfa4"/></g>
+  <path d="M0,760 C300,720 500,800 800,760 C1100,720 1300,800 1600,750 L1600,835 C1300,875 1100,805 800,845 C500,885 300,805 0,845 Z" fill="#bfe0f2"/>
+  <path class="stream s1" d="M0,782 C300,742 500,822 800,782 C1100,742 1300,822 1600,772" fill="none" stroke="#fff" stroke-width="4" opacity=".65"/>
+  <path class="stream s2" d="M0,812 C300,772 500,852 800,812 C1100,772 1300,852 1600,802" fill="none" stroke="#e6f4fb" stroke-width="3" opacity=".55"/>
+</svg>
+
+<!-- ФОН МОРЕ -->
+<svg id="bgSea" class="bgsvg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" style="display:none">
+  <circle cx="300" cy="160" r="90" fill="#fff6d8" opacity=".35"/><circle cx="300" cy="160" r="58" fill="#fff3c4" opacity=".8"/>
+  <g class="cloud c1" fill="#fff" opacity=".7"><ellipse cx="500" cy="130" rx="95" ry="26"/><ellipse cx="565" cy="108" rx="60" ry="20"/><ellipse cx="445" cy="110" rx="52" ry="18"/></g>
+  <g class="cloud c2" fill="#fff" opacity=".6"><ellipse cx="1000" cy="90" rx="80" ry="22"/><ellipse cx="1055" cy="72" rx="50" ry="16"/><ellipse cx="950" cy="74" rx="44" ry="15"/></g>
+  <g class="cloud c3" fill="#fff" opacity=".65"><ellipse cx="1300" cy="200" rx="88" ry="24"/><ellipse cx="1360" cy="180" rx="55" ry="18"/><ellipse cx="1245" cy="182" rx="48" ry="16"/></g>
+  <path d="M420,240 q12,-10 24,0 q12,-10 24,0" fill="none" stroke="#90a4ae" stroke-width="3" opacity=".7"/>
+  <path d="M0,540 L1600,540 L1600,900 L0,900 Z" fill="#bfe0ea"/>
+  <path class="wave w1" d="M-200,570 Q0,550 200,570 T600,570 T1000,570 T1400,570 T1800,570 L1800,900 L-200,900 Z" fill="#a8d4e2"/>
+  <path class="wave w2" d="M-200,640 Q0,616 200,640 T600,640 T1000,640 T1400,640 T1800,640 L1800,900 L-200,900 Z" fill="#93c6d8" opacity=".85"/>
+  <path class="wave w3" d="M-200,720 Q0,694 200,720 T600,720 T1000,720 T1400,720 T1800,720 L1800,900 L-200,900 Z" fill="#7fb8cd" opacity=".8"/>
+  <g class="boatbg"><path d="M980,560 q60,44 150,0 l-18,30 q-57,22 -114,0 z" fill="#8d6e63" stroke="#6d4c41" stroke-width="3"/><rect x="1052" y="420" width="5" height="140" fill="#6d4c41"/><path d="M1057,428 L1057,552 L1140,552 Z" fill="#fff" stroke="#cfd8dc" stroke-width="2"/><path d="M1052,436 L1052,552 L978,552 Z" fill="#f4fafd" stroke="#cfd8dc" stroke-width="2"/><path d="M1052,420 l26,8 l-26,8 z" fill="#e57373"/></g>
+</svg>
+
+<!-- СТАРТ: ВЫБОР РЕЖИМА + МУЗЫКА -->
+<div id="modeOverlay" class="ov" style="display:flex">
+  <div class="modal">
+    <h2>Выбери режим</h2>
+    <div class="sub">Дыхание для спокойствия или помощь при панической атаке</div>
+    <div class="modebtns">
+      <button class="modebtn" id="pickW"><b>🌿 4-7-8 — «Расслабляющее дыхание»</b><span>вдох 4 — задержка 7 — выдох 8. Деревня, облачка, речка.</span></button>
+      <button class="modebtn" id="pickS"><b>⛵ 4-4-4 — «Квадратное дыхание» </b><span>вдох 4 — пауза 4 — выдох 4. Море, парусник, тишина.</span></button>
+      <button class="modebtn" id="pickP"><b>🌊 Паническая атака — «Волна»</b><span>дыхание 4-6 + заземление 5-4-3-2-1 + мышцы. Море успокаивается вместе с тобой.</span></button>
+    </div>
+    <div class="musrow">
+      <label class="switch"><input type="checkbox" id="musChk"><span class="slider"></span></label>
+      Включить приятную музыку 
+    </div>
+  </div>
+</div>
+
+<!-- ПАНИКА: вступление -->
+<div id="panicIntro" class="ov">
+  <div class="modal">
+    <h2>🌊 Похоже, накрывает волна</h2>
+    <p><b>Ты в безопасности.</b> Паническая атака — выброс адреналина: страшно, но <b>не опасно</b>. Пик проходит за 5–10 минут, волна всегда спадает.</p>
+    <p>Пройдём вместе: <b>дыхание 4-6 → заземление 5-4-3-2-1 → мышцы</b>. Море на экране показывает тревогу — с каждым шагом оно спокойнее.</p>
+    <button class="gobtn" id="btnGo">Я со мной — начать</button>
+  </div>
+</div>
+
+<!-- ПАНИКА: финал -->
+<div id="finOv" class="ov">
+  <div class="modal">
+    <h2>💙 Волна спадает. Ты справился</h2>
+    <p>Тревога была <b id="finA0">9</b>/10, стала <b id="finA1">1</b>/10. Посмотри, как тихо стало море.</p>
+    <p>💧 Умойся прохладной водой · 🥛 попей воды мелкими глотками · 📱 напиши близкому · останься на месте ещё пару минут.</p>
+    <button class="gobtn" id="btnStay">Остаться в тишине</button>
+  </div>
+</div>
+
+<div class="wrap">
+<h1 id="hTitle">Выбери режим тренировки</h1>
+
+<!-- ===== ИНТЕРФЕЙС ДЫХАНИЯ ===== -->
+<div class="app" id="uiBreath" style="display:none">
+  <div class="card">
+    <button class="btn-start" id="btnStart">СТАРТ</button>
+    <div class="mrow"><label class="switch"><input type="checkbox" id="metro"><span class="slider"></span></label> метроном</div>
+    <div class="mrow"><label class="switch"><input type="checkbox" id="musB"><span class="slider"></span></label> музыка</div>
+    <div class="steps">
+      <div class="step" id="s0" style="--c:#64b5f6"><span class="dot"></span>ВДОХ — 4 сек</div>
+      <div class="step" id="s1" style="--c:#ffb74d"><span class="dot"></span>ЗАДЕРЖКА — 7 сек</div>
+      <div class="step" id="s2" style="--c:#9575cd"><span class="dot"></span>ВЫДОХ — 8 сек</div>
+      <div class="step" id="s3" style="--c:#b0bec5"><span class="dot"></span>ПАУЗА — 0,5 сек</div>
+    </div>
+    <div class="hint" id="cycHint">1 цикл = 19,5 сек</div>
+    <div style="text-align:center"><button class="linkbtn" id="btnChange">⟲ сменить режим</button></div>
+  </div>
+  <div class="stage">
+    <svg class="main" viewBox="0 0 400 400">
+      <defs><radialGradient id="gb" cx="35%" cy="30%" r="75%"><stop offset="0%" stop-color="#eaf6ff"/><stop offset="55%" stop-color="#90caf9"/><stop offset="100%" stop-color="#5c9ce6"/></radialGradient></defs>
+      <circle cx="200" cy="185" r="150" fill="none" stroke="#e0e4ea" stroke-width="10"/>
+      <circle id="ring" cx="200" cy="185" r="150" fill="none" stroke="#64b5f6" stroke-width="10" stroke-linecap="round" stroke-dasharray="942.5" stroke-dashoffset="942.5" transform="rotate(-90 200 185)"/>
+      <g id="ballG"><circle cx="200" cy="185" r="95" fill="url(#gb)" stroke="#4a86c8" stroke-width="3"/><ellipse cx="168" cy="148" rx="26" ry="16" fill="rgba(255,255,255,.55)"/><path d="M192,281 h16 l-8,10 z" fill="#4a86c8"/><path d="M200,291 q-7,14 0,26 q7,12 0,26" stroke="#4a86c8" fill="none" stroke-width="3"/></g>
+      <text id="cntTxt" x="200" y="207" font-size="62" text-anchor="middle" fill="#123a6d" font-weight="800">1</text>
+    </svg>
+    <div class="phlabel" id="phLabel" style="color:#64b5f6">ВДОХ</div>
+    <div class="cbar" id="cbar"></div>
+    <div class="cbarlbl" id="cbarlbl"></div>
+  </div>
+  <div class="side">
+    <div class="plate" id="plate">…</div>
+    <div class="pcount">фраз показано: <b id="phVal">0</b> · циклов: <b id="cycVal">0</b></div>
+    <div class="hint">После каждого выдоха — случайная хорошая мысль из 20.</div>
+  </div>
+</div>
+
+<!-- ===== ИНТЕРФЕЙС ПАНИКИ ===== -->
+<div class="app" id="uiPanic" style="display:none">
+  <div class="card">
+    <div class="stepcard" id="sc1">
+      <h3>1 · Дыхание: вдох 4 — выдох 6</h3>
+      <button class="bigbtn" id="pBtnBreath">🫁 Дышать со мной (4 цикла)</button>
+    </div>
+    <div class="stepcard" id="sc2">
+      <h3>2 · Заземление 5-4-3-2-1</h3>
+      <div class="grow" id="r0"><span>👀 вижу</span><b>0/5</b><button class="plus" data-g="0">+</button></div>
+      <div class="grow" id="r1"><span>✋ трогаю</span><b>0/4</b><button class="plus" data-g="1">+</button></div>
+      <div class="grow" id="r2"><span>👂 слышу</span><b>0/3</b><button class="plus" data-g="2">+</button></div>
+      <div class="grow" id="r3"><span>👃 запах</span><b>0/2</b><button class="plus" data-g="3">+</button></div>
+      <div class="grow" id="r4"><span>👅 вкус</span><b>0/1</b><button class="plus" data-g="4">+</button></div>
+    </div>
+    <div class="stepcard" id="sc3">
+      <h3>3 · Мышцы: 3 цикла подряд (сжать 5 с → отпустить 10 с)</h3>
+      <svg class="fistsvg" viewBox="0 0 130 115">
+        <g id="ballV"><circle cx="65" cy="76" r="27" fill="#f48fb1" stroke="#c2185b" stroke-width="3"/><circle cx="57" cy="70" r="2.6" fill="#880e4f"/><circle cx="73" cy="70" r="2.6" fill="#880e4f"/><path id="smileV" d="M57,82 q8,6 16,0" stroke="#880e4f" fill="none" stroke-width="2.5" stroke-linecap="round"/></g>
+        <g id="fistV"><path d="M33,44 q32,-26 64,0 l0,12 q-32,-16 -64,0 z" fill="#ffcc80" stroke="#ef6c00" stroke-width="3" stroke-linejoin="round"/><path d="M41,52 q4,8 2,12 M57,48 q3,9 2,14 M73,48 q3,9 2,14 M89,52 q4,8 2,12" stroke="#ef6c00" stroke-width="3" fill="none" stroke-linecap="round"/></g>
+      </svg>
+      <div class="biglabel" id="pTLabel" style="color:#546e7a">Один клик — и рука пройдёт 3 цикла сама</div>
+      <button class="bigbtn tense" id="pBtnTense" style="margin-top:4px">▶ Сжать и отпустить ×3</button>
+      <div class="albl" id="pTenseInfo" style="margin-top:4px">цикл 0/3</div>
+    </div>
+    <div class="mrow"><label class="switch"><input type="checkbox" id="musP"><span class="slider"></span></label> музыка</div>
+    <div style="text-align:center"><button class="linkbtn" id="btnChange2">⟲ сменить режим</button></div>
+  </div>
+  <div class="stage">
+    <svg class="sea" viewBox="0 0 640 400">
+      <circle cx="540" cy="70" r="46" fill="#fff3c4" opacity=".8"/>
+      <g id="pbBallG" opacity="0"><circle id="pbBallC" cx="320" cy="110" r="52" fill="#90caf9" stroke="#4a86c8" stroke-width="3"/><ellipse cx="302" cy="90" rx="14" ry="9" fill="rgba(255,255,255,.6)"/><text id="pbBallT" x="320" y="124" font-size="34" text-anchor="middle" fill="#0d3a6d" font-weight="800">4</text></g>
+      <g id="pBoatG"><path d="M280,238 q40,30 100,0 l-12,20 q-38,15 -76,0 z" fill="#8d6e63" stroke="#6d4c41" stroke-width="3"/><rect x="326" y="150" width="4" height="88" fill="#6d4c41"/><path d="M330,156 L330,232 L384,232 Z" fill="#fff" stroke="#cfd8dc" stroke-width="2"/><path d="M326,162 L326,232 L278,232 Z" fill="#f4fafd" stroke="#cfd8dc" stroke-width="2"/><path d="M326,150 l18,6 l-18,6 z" fill="#e57373"/></g>
+      <path id="pw1" fill="#a8d4e2"/><path id="pw2" fill="#93c6d8" opacity=".85"/><path id="pw3" fill="#7fb8cd" opacity=".8"/>
+    </svg>
+    <div class="phlabel" id="pPhLabel"></div>
+  </div>
+  <div class="card ameter-wrap">
+    <div class="albl">ТРЕВОГА</div>
+    <div class="anum" id="anxVal" style="color:#ef5350">9</div>
+    <div class="ameter"><i id="anxFill" style="height:90%"></i></div>
+    <div class="albl">0 — спокойно · 10 — шторм</div>
+    <div class="plate" id="pPlate">…</div>
+  </div>
+</div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const fmt=x=>String(x).replace('.',',');
+const ease=p=>p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
+const PHR=['Ты в безопасности.','Каждый выдох отпускает напряжение.','Твоё дыхание — твой якорь.','Мышцы лица расслабляются.','Плечи опускаются и тяжелеют.','Сердце бьётся ровно и спокойно.','Мысли плывут, как облака, — отпусти их.','Внутри становится просторно.','Тёплый покой наполняет грудь.','Ты никуда не спешишь.','Тело становится лёгким.','Мир мягче, чем кажется.','Ты замечаешь, как тихо вокруг.','Каждая клетка дышит свободно.','Напряжение уходит через кончики пальцев.','Ты — наблюдатель своего покоя.','Вдох приносит свет, выдох — тишину.','Челюсть и шея расслаблены.','Ты разрешаешь себе отдохнуть.','С каждым циклом — спокойнее.'];
+const MODES={
+ w:{title:'🌿 Дыхание 4-7-8 — расслабляющее дыхание',ph:[{n:'ВДОХ',d:4,c:'#64b5f6'},{n:'ЗАДЕРЖКА',d:7,c:'#ffb74d'},{n:'ВЫДОХ',d:8,c:'#9575cd'},{n:'ПАУЗА',d:.5,c:'#b0bec5'}]},
+ s:{title:'⛵ Дыхание 4-4-4 — квадратное дыхание',ph:[{n:'ВДОХ',d:4,c:'#64b5f6'},{n:'ЗАДЕРЖКА',d:4,c:'#ffb74d'},{n:'ВЫДОХ',d:4,c:'#9575cd'},{n:'ПАУЗА',d:.5,c:'#b0bec5'}]}};
+let mode=null,PH=MODES.w.ph,TOTAL=19.5,C=942.5,BASE=.55;
+/* дыхание-состояние */
+let bRun=false,bPhIdx=0,bStart=0,bCycle=0,bPhrases=0,bLastPh=-1,bLastSec=-1;
+/* паника-состояние */
+let anxiety=9,a0=9,pw1=0,pw2=0,pw3=0,pBreathOn=false,pBPhase='in',pBStart=0,pBCycles=0;
+let gCnt=[0,0,0,0,0],gDone=false,pLastPh=-1;
+let tState=null,tStart=0,tRound=0,tDone=false,T=0,finShown=false;
+let prev=performance.now();
+
+/* ---------- ЗВУК ---------- */
+let AC=null;
+function ensureAudio(){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume()}catch(e){}}
+function tick(f,v){try{ensureAudio();if(!AC||AC.state!=='running')return;const t=AC.currentTime;
+  const o=AC.createOscillator(),g=AC.createGain();o.type='sine';o.frequency.value=f||660;
+  g.gain.setValueAtTime(v||.2,t);g.gain.exponentialRampToValueAtTime(.001,t+.1);
+  o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+.11)}catch(e){}}
+document.addEventListener('pointerdown',ensureAudio);
+/* приятная музыка: мягкие аккорды, тише метронома */
+const CHORDS=[[261.6,329.6,392],[220,261.6,329.6],[174.6,220,261.6],[196,246.9,293.7]];
+let musOn=false,musTimer=null,chI=0;
+function playChord(){if(!musOn||!AC||AC.state!=='running')return;const t=AC.currentTime;const ch=CHORDS[chI++%4];
+  ch.forEach((f,i)=>{const o=AC.createOscillator(),g=AC.createGain();o.type='sine';o.frequency.value=i===0?f/2:f;
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.045,t+1.4);g.gain.linearRampToValueAtTime(.0001,t+3.9);
+    o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+4)})}
+function setMusic(on){musOn=on;$('musB').checked=on;$('musP').checked=on;
+  if(on){ensureAudio();if(!musTimer){playChord();musTimer=setInterval(playChord,4000)}}
+  else{clearInterval(musTimer);musTimer=null}}
+$('musB').onchange=e=>setMusic(e.target.checked);
+$('musP').onchange=e=>setMusic(e.target.checked);
+$('metro').addEventListener('change',()=>{ensureAudio();if($('metro').checked)tick(980,.35)});
+
+/* ---------- ВЫБОР РЕЖИМА ---------- */
+function pick(m){
+  mode=m;stopAll();
+  $('modeOverlay').style.display='none';
+  $('uiBreath').style.display=m==='p'?'none':'grid';
+  $('uiPanic').style.display=m==='p'?'grid':'none';
+  $('bgVillage').style.display=m==='w'?'':'none';
+  $('bgSea').style.display=m==='s'?'':'none';
+  if(m==='p'){$('hTitle').textContent='🌊 «Волна» — помощь при панической атаке';$('panicIntro').style.display='flex';}
+  else{PH=MODES[m].ph;buildUI();$('hTitle').textContent=MODES[m].title;}
+  setMusic($('musChk').checked);
+}
+$('pickW').onclick=()=>pick('w');
+$('pickS').onclick=()=>pick('s');
+$('pickP').onclick=()=>pick('p');
+$('btnChange').onclick=()=>{stopAll();$('modeOverlay').style.display='flex'};
+$('btnChange2').onclick=()=>{stopAll();$('modeOverlay').style.display='flex'};
+$('btnGo').onclick=()=>{ensureAudio();$('panicIntro').style.display='none'};
+$('btnStay').onclick=()=>{$('finOv').style.display='none'};
+
+function stopAll(){
+  bRun=false;$('btnStart').textContent='СТАРТ';$('btnStart').classList.remove('run');
+  $('ballG').setAttribute('transform',`translate(200 185) scale(${BASE}) translate(-200 -185)`);
+  $('ring').setAttribute('stroke-dashoffset',C);
+  pBreathOn=false;tState=null;
+  $('pbBallG').setAttribute('opacity',0);
+}
+
+/* ---------- ДЫХАНИЕ ---------- */
+function buildUI(){
+  TOTAL=PH.reduce((a,p)=>a+p.d,0);
+  [0,1,2,3].forEach(i=>{$('s'+i).innerHTML=`<span class="dot"></span>${PH[i].n} — ${fmt(PH[i].d)} сек`});
+  $('cycHint').textContent='1 цикл = '+fmt(TOTAL)+' сек';
+  const bar=$('cbar');bar.innerHTML='';let x=0;
+  PH.forEach(p=>{const s=document.createElement('div');s.className='segm';s.style.left=(x/TOTAL*100)+'%';s.style.width=(p.d/TOTAL*100)+'%';s.style.background=p.c;bar.appendChild(s);x+=p.d});
+  for(let t=1;t<Math.floor(TOTAL);t++){const k=document.createElement('div');k.className='tick';k.style.left=(t/TOTAL*100)+'%';bar.appendChild(k)}
+  const cur=document.createElement('i');cur.className='cur';cur.style.left='0';bar.appendChild(cur);
+  let c=0;const lbl=[0];PH.forEach(p=>{c+=p.d;lbl.push(c)});
+  $('cbarlbl').innerHTML=lbl.map((v,i)=>`<span>${i===0?'0 с':fmt(v)}</span>`).join('');
+}
+function bPhrase(){let i;do{i=Math.floor(Math.random()*20)}while(i===bLastPh);bLastPh=i;bPhrases++;$('phVal').textContent=bPhrases;
+  const p=$('plate');p.classList.remove('show');void p.offsetWidth;p.textContent='🕊 '+PHR[i];p.classList.add('show');}
+$('btnStart').onclick=()=>{ensureAudio();bRun=!bRun;
+  $('btnStart').textContent=bRun?'СТОП':'СТАРТ';$('btnStart').classList.toggle('run',bRun);
+  if(bRun){bPhIdx=0;bStart=performance.now();bLastSec=-1}else stopAll();};
+
+/* ---------- ПАНИКА ---------- */
+function setAnx(v){anxiety=Math.max(0,Math.min(10,v));
+  $('anxVal').textContent=Math.round(anxiety);
+  $('anxVal').style.color=anxiety>6?'#ef5350':anxiety>3?'#fb8c00':'#43a047';
+  $('anxFill').style.height=(anxiety*10)+'%';
+  $('anxFill').style.background=anxiety>6?'linear-gradient(180deg,#ef5350,#ff8a65)':anxiety>3?'linear-gradient(180deg,#ffb74d,#ffd54f)':'linear-gradient(180deg,#81c784,#4db6ac)';}
+function pPhrase(){let i;do{i=Math.floor(Math.random()*PHR.length)}while(i===pLastPh);pLastPh=i;
+  const p=$('pPlate');p.classList.remove('show');void p.offsetWidth;p.textContent='🕊 '+PHR[i];p.classList.add('show');}
+$('pBtnBreath').onclick=()=>{if(pBreathOn||pBCycles>=4)return;ensureAudio();
+  pBreathOn=true;pBPhase='in';pBStart=performance.now();$('pbBallG').setAttribute('opacity',1);$('pBtnBreath').disabled=true;};
+document.querySelectorAll('.plus').forEach(b=>b.onclick=()=>{
+  const i=+b.dataset.g;if(gCnt[i]>=[5,4,3,2,1][i])return;
+  gCnt[i]++;tick(700+i*60);
+  $('r'+i).querySelector('b').textContent=gCnt[i]+'/'+[5,4,3,2,1][i];
+  if(gCnt[i]>=[5,4,3,2,1][i]){$('r'+i).classList.add('done');b.disabled=true;setAnx(anxiety-.6);pPhrase();}
+  if(!gDone&&gCnt.every((c,k)=>c>=[5,4,3,2,1][k])){gDone=true;$('sc2').classList.add('done');}
+  checkFin();});
+/* ОДИН КЛИК — 3 ЦИКЛА ПОДРЯД */
+$('pBtnTense').onclick=()=>{if(tDone||tState)return;ensureAudio();
+  tState='tense';tRound=1;tStart=performance.now();tick(500);$('pBtnTense').disabled=true;
+  $('pTenseInfo').textContent='цикл 1/3';};
+function checkFin(){if(!finShown&&pBCycles>=4&&gDone&&tDone){finShown=true;
+  $('finA0').textContent=Math.round(a0);$('finA1').textContent=Math.round(anxiety);
+  setTimeout(()=>{$('finOv').style.display='flex'},700)}}
+function wavePath(base,A,ph){let d=`M0,${(base+Math.sin(ph/58)*A).toFixed(1)}`;
+  for(let x=16;x<=640;x+=16)d+=` L${x},${(base+Math.sin((x+ph)/58)*A).toFixed(1)}`;
+  return d+` L640,400 L0,400 Z`}
+
+/* ---------- ОБЩИЙ ЦИКЛ ---------- */
+function loop(now){
+  try{
+    const dt=Math.min(50,now-prev);
+    if(mode==='w'||mode==='s'){
+      if(bRun){
+        let el=(now-bStart)/1000;
+        while(el>=PH[bPhIdx].d){bStart+=PH[bPhIdx].d*1000;
+          if(bPhIdx===2)bPhrase();
+          bPhIdx=(bPhIdx+1)%4;
+          if(bPhIdx===0){bCycle++;$('cycVal').textContent=bCycle}
+          el=(now-bStart)/1000;bLastSec=-1;}
+        const ph=PH[bPhIdx],p=Math.min(1,el/ph.d);
+        let s=BASE;
+        if(bPhIdx===0)s=BASE+(1-BASE)*ease(p);
+        else if(bPhIdx===1)s=1+.012*Math.sin(now/280);
+        else if(bPhIdx===2)s=1-(1-BASE)*ease(p);
+        $('ballG').setAttribute('transform',`translate(200 185) scale(${s.toFixed(3)}) translate(-200 -185)`);
+        $('ring').setAttribute('stroke-dashoffset',(C*(1-p)).toFixed(1));$('ring').setAttribute('stroke',ph.c);
+        $('cntTxt').textContent=ph.d===.5?el.toFixed(1):String(Math.min(ph.d,Math.floor(el)+1));
+        $('phLabel').textContent=ph.n;$('phLabel').style.color=ph.c;
+        let before=0;for(let i=0;i<bPhIdx;i++)before+=PH[i].d;
+        const cur=document.querySelector('#cbar .cur');if(cur)cur.style.left=((before+el)/TOTAL*100)+'%';
+        [0,1,2,3].forEach(i=>$('s'+i).classList.toggle('on',i===bPhIdx));
+        const sec=Math.floor(el);
+        if($('metro').checked&&sec!==bLastSec){bLastSec=sec;tick(sec===0?980:660,sec===0?.35:.18)}
+      }
+    }
+    if(mode==='p'){
+      let label='',lcol='#546e7a';
+      if(pBreathOn){
+        const el=(now-pBStart)/1000;let s;
+        if(pBPhase==='in'){s=.55+.45*ease(Math.min(1,el/4));$('pbBallT').textContent=Math.min(4,Math.floor(el)+1);label='ВДОХ';lcol='#64b5f6';
+          if(el>=4){pBPhase='out';pBStart=now}}
+        else{s=1-.45*ease(Math.min(1,el/6));$('pbBallT').textContent=Math.min(6,Math.floor(el)+1);label='ВЫДОХ';lcol='#9575cd';
+          if(el>=6){pBCycles++;pBPhase='in';pBStart=now;
+            if(pBCycles>=4){pBreathOn=false;$('pbBallG').setAttribute('opacity',0);
+              $('sc1').classList.add('done');setAnx(anxiety-3);pPhrase();checkFin();}}}
+        $('pbBallC').setAttribute('r',(52*s+20).toFixed(1));
+        $('pbBallC').setAttribute('cy',(110+(1-s)*10).toFixed(1));
+      }
+      /* мышцы: 3 цикла подряд */
+      if(tState==='tense'){const el=(now-tStart)/1000;
+        label='СЖИМАЙ! '+Math.min(5,Math.floor(el)+1);lcol='#c62828';
+        $('pTLabel').textContent=`цикл ${tRound}/3 · СЖИМАЙ! ${Math.min(5,Math.floor(el)+1)} с`;$('pTLabel').style.color='#c62828';
+        if(el>=5){tState='relax';tStart=now;tick(900)}}
+      else if(tState==='relax'){const el=(now-tStart)/1000;
+        label='ОТПУСТИ… '+Math.min(10,Math.floor(el)+1);lcol='#2e7d32';
+        $('pTLabel').textContent=`цикл ${tRound}/3 · ОТПУСТИ… ${Math.min(10,Math.floor(el)+1)} с`;$('pTLabel').style.color='#2e7d32';
+        if(el>=10){setAnx(anxiety-.66);pPhrase();
+          if(tRound>=3){tState=null;tDone=true;$('sc3').classList.add('done');
+            $('pTLabel').textContent='3 цикла выполнены ✓';$('pTenseInfo').textContent='цикл 3/3';checkFin();}
+          else{tRound++;tState='tense';tStart=now;tick(500);$('pTenseInfo').textContent='цикл '+tRound+'/3';}}}
+      const target=tState==='tense'?1:0;
+      T+=(target-T)*Math.min(1,dt/220);
+      $('ballV').setAttribute('transform',`translate(65 76) scale(${(1+.16*T).toFixed(3)} ${(1-.32*T).toFixed(3)}) translate(-65 -76)`);
+      $('fistV').setAttribute('transform',`translate(0 ${(11*T).toFixed(1)})`);
+      $('smileV').setAttribute('d',T>.5?'M59,84 q6,-4 12,0':'M57,82 q8,6 16,0');
+      $('pPhLabel').textContent=label;$('pPhLabel').style.color=lcol;
+      const A=3+anxiety*3.2,sp=.03+anxiety*.004;
+      pw1+=dt*sp;pw2+=dt*sp*1.3;pw3+=dt*sp*.8;
+      $('pw1').setAttribute('d',wavePath(268,A,pw1));
+      $('pw2').setAttribute('d',wavePath(300,A*.8,pw2+200));
+      $('pw3').setAttribute('d',wavePath(336,A*.6,pw3+400));
+      const rock=Math.sin(now/600)*(2+anxiety*1.2),bob=Math.sin(now/700)*(2+anxiety*1.5);
+      $('pBoatG').setAttribute('transform',`translate(0 ${bob.toFixed(1)}) rotate(${rock.toFixed(1)} 320 230)`);
+    }
+  }catch(e){console.error(e)}
+  prev=now;requestAnimationFrame(loop);
+}
+setAnx(9);
+requestAnimationFrame(loop);
+</script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW registration failed: ', err));
+            });
+        }
+    </script>
+</body>
+</html>
